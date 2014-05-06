@@ -45,7 +45,6 @@ public class Form_View {
 				System.out.println(jcb.getSelectedItem());
 				String item = (String) jcb.getSelectedItem();
 				if (item.equals("Scolarite")) {
-					System.out.println("je dois ajouter 4 JTextField");
 					JTextField[] tab = new JTextField[4];
 					tab[0] = new JTextField("Diplome", 20);
 					tab[1] = new JTextField("Lieu de preparation", 20);
@@ -63,7 +62,6 @@ public class Form_View {
 					frame.revalidate();
 					nb_ecole++;
 				} else if (item.equals("Experience")) {
-					System.out.println("je dois ajouter 3 JTextField");
 					JTextField[] tab = new JTextField[3];
 					tab[0] = new JTextField("Nom de l'entreprise", 20);
 					tab[1] = new JTextField("Poste occupe", 20);
@@ -82,7 +80,6 @@ public class Form_View {
 					
 					nb_experience++;
 				} else if (item.equalsIgnoreCase("Competence")) {
-					System.out.println("je dois ajouter 2 JTextField");
 					JTextField[] tab = new JTextField[2];
 					tab[0] = new JTextField("Nom", 20);
 					tab[1] = new JTextField("Niveau", 20);
@@ -98,7 +95,6 @@ public class Form_View {
 					frame.revalidate();
 					nb_competence++;
 				} else if (item.equals("Langue")) {
-					System.out.println("je dois ajouter 2 JTextField");
 					JTextField[] tab = new JTextField[2];
 					tab[0] = new JTextField("Nom", 20);
 					tab[1] = new JTextField("Niveau", 20);
