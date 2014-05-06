@@ -50,7 +50,7 @@ public class CV_View {
 			}
 			if (cv.getCompetences_info().getCompetences().size() != 0) {
 				q = new JPanel(new GridLayout(cv.getCompetences_info().getCompetences().size() + 1, 1)); {
-					q.add(new JLabel("Compétences : "));
+					q.add(new JLabel("Competences : "));
 					for (Competence cp : cv.getCompetences_info().getCompetences()) {
 						q.add(new JLabel("- " + cp.getNom() + " (" +cp.getNiveau() + ")"));
 					}
@@ -92,8 +92,8 @@ public class CV_View {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	Resume cv = new Resume();
-            	cv.setFirstName("Jérémy");
-            	cv.setLastName("Hébert");
+            	cv.setFirstName("Jeremy");
+            	cv.setLastName("Hebert");
             	List<Competence> lCp = new ArrayList<Competence>();
             	lCp.add(new Competence("Java" , "bon"));
             	lCp.add(new Competence("C" , "moyen"));

@@ -48,7 +48,7 @@ public class Form_View {
 					System.out.println("je dois ajouter 4 JTextField");
 					JTextField[] tab = new JTextField[4];
 					tab[0] = new JTextField("Diplome", 20);
-					tab[1] = new JTextField("Lieu de préparation", 20);
+					tab[1] = new JTextField("Lieu de preparation", 20);
 					tab[2] = new JTextField("Ville", 20);
 					tab[3] = new JTextField("Date", 20);
 					
@@ -66,7 +66,7 @@ public class Form_View {
 					System.out.println("je dois ajouter 3 JTextField");
 					JTextField[] tab = new JTextField[3];
 					tab[0] = new JTextField("Nom de l'entreprise", 20);
-					tab[1] = new JTextField("Poste occupé", 20);
+					tab[1] = new JTextField("Poste occupe", 20);
 					tab[2] = new JTextField("Date", 20);
 
 					map.put("Experience"+nb_experience, tab);
@@ -81,7 +81,7 @@ public class Form_View {
 					frame.revalidate();
 					
 					nb_experience++;
-				} else if (item.equalsIgnoreCase("Compétence")) {
+				} else if (item.equalsIgnoreCase("Competence")) {
 					System.out.println("je dois ajouter 2 JTextField");
 					JTextField[] tab = new JTextField[2];
 					tab[0] = new JTextField("Nom", 20);
@@ -130,7 +130,7 @@ public class Form_View {
 		frame.add(p, BorderLayout.NORTH);
 		JTextField[] tab = new JTextField[4];
 		tab[0] = new JTextField("Diplome", 20);
-		tab[1] = new JTextField("Lieu de préparation", 20);
+		tab[1] = new JTextField("Lieu de preparation", 20);
 		tab[2] = new JTextField("Ville", 20);
 		tab[3] = new JTextField("Date", 20);
 		JPanel tmp = new JPanel(new GridLayout(1, 5)); {
@@ -142,7 +142,7 @@ public class Form_View {
 		panel.add(tmp);
 		tab = new JTextField[3];
 		tab[0] = new JTextField("Nom de l'entreprise", 20);
-		tab[1] = new JTextField("Poste occupé", 20);
+		tab[1] = new JTextField("Poste occupe", 20);
 		tab[2] = new JTextField("Date", 20);
 		tmp = new JPanel(new GridLayout(1, 4)); {
 			tmp.add(new JLabel("Experience : "));
@@ -185,8 +185,8 @@ public class Form_View {
 		ajouter_champs = new JButton("Ajouter les champs");
 		map = new TreeMap<String, JTextField[]>();
 		jcb = new JComboBox<String>();
-		add = new JButton("Ajouter le CV à la base");
-		jcb.addItem("Compétence");
+		add = new JButton("Ajouter le CV a la base");
+		jcb.addItem("Competence");
 		jcb.addItem("Experience");		
 		jcb.addItem("Langue");
 		jcb.addItem("Scolarite");
