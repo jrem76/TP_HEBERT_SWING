@@ -177,7 +177,7 @@ public class Form_View {
 	private void createView() {
 		// TODO Auto-generated method stub
 		Resume cv = new Resume();
-		frame = new JFrame("CV - Ajouter un CV");
+		frame = new JFrame("CV --- Ajouter un CV ---");
 		ajouter_champs = new JButton("Ajouter les champs");
 		map = new TreeMap<String, JTextField[]>();
 		jcb = new JComboBox<String>();
