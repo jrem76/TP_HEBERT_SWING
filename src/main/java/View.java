@@ -81,12 +81,12 @@ public class View {
 	}
 	
 	private void createModel() throws JAXBException, SAXException, IOException, ParserConfigurationException {
-		
+		list_cv = new HashMap<JButton, Integer>();
         lister_les_cv();
 	}
 
     private void lister_les_cv() throws JAXBException, SAXException, IOException, ParserConfigurationException {
-    	list_cv = new HashMap<JButton, Integer>();
+    	
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
@@ -100,7 +100,11 @@ public class View {
             String lastName = list.item(2).getTextContent();
             String firstName = list.item(1).getTextContent();
             String id = list.item(0).getTextContent();
-            list_cv.put(new JButton("Voir le CV de " + firstName + " " + lastName), Integer.parseInt(id));
+            //System.out.println(id);
+            if (i >= nb_affiches || nb_affiches == 0) {
+
+            	list_cv.put(new JButton("Voir le CV de " + firstName + " " + lastName), Integer.parseInt(id));
+            }
         }
     }
 	private void placeComponents() {
@@ -169,11 +173,35 @@ public class View {
 	                    		if (list_cv.get(j) < nb_affiches) continue;
 	            				tmp.add(j);
 	            				nb_affiches++;
+	            				/* Ajout du listener */
+	            				j.addActionListener(new ActionListener() {
+	            					@Override
+	            					public void actionPerformed(ActionEvent e) {
+	            						JButton jb = (JButton) e.getSource();
+	            						try {
+	            							DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	            					        factory.setValidating(false);
+	            					        factory.setNamespaceAware(true);
+	            					        DocumentBuilder builder = factory.newDocumentBuilder();
+	            					        Document document = builder.parse(URL + list_cv.get(jb));
+	            					        NodeList racine = document.getDocumentElement().getElementsByTagName("listResume");
+	            							Resume cv = analyze(racine);
+	            							new CV_View(cv, frame);
+	            						} catch (ParserConfigurationException e1) {
+	            							e1.printStackTrace();
+	            						} catch (SAXException e1) {
+	            							e1.printStackTrace();
+	            						} catch (IOException e1) {
+	            							e1.printStackTrace();
+	            						}				
+	            					}
+	            				});
 	            			}
-	            		}
-	                    panel.add(tmp);
+	            			
+	            		}	                    
+	                    panel.add(tmp);	                    
 	                    panel.revalidate();
-	                    frame.revalidate();
+	                    frame.revalidate();	                    
                     }
                 } catch (JAXBException e1) {
                     e1.printStackTrace();
