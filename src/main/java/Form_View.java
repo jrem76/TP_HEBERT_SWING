@@ -68,7 +68,6 @@ public class Form_View {
 		ajouter_champs.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(jcb.getSelectedItem());
 				String item = (String) jcb.getSelectedItem();
 				if (item.equals("Scolarite")) {
 					JTextField[] tab = new JTextField[4];
@@ -142,13 +141,11 @@ public class Form_View {
 		});
         add.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println(map.keySet().size());
                 Langues langues = new Langues();
                 Competences_Info ci = new Competences_Info();
                 Scolarite sc = new Scolarite();
                 Experiences exp = new Experiences();
                 for (String s : map.keySet()) {
-                    System.out.println(s);
                     JTextField[] tab = map.get(s);
                     if (s.contains("Langue")) {
                         String nom;
@@ -215,7 +212,6 @@ public class Form_View {
                         ci.add(new Competence(nom, niveau));
                     }
                 }
-                System.out.println(lastName.getText());
                 if (!lastName.getText().isEmpty() && !lastName.getText().equals("Nom"))
                     cv.setLastName(lastName.getText());
                 else
@@ -248,7 +244,7 @@ public class Form_View {
                 Source.class, Service.Mode.MESSAGE);
         Map<String, Object> requestContext = dispatcher.getRequestContext();
         requestContext.put(MessageContext.HTTP_REQUEST_METHOD, "PUT");
-        Source result = dispatcher.invoke(new JAXBSource(jc, cv));
+        dispatcher.invoke(new JAXBSource(jc, cv));
     }
 
 	private void placeComponents() {

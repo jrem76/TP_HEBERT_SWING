@@ -36,9 +36,11 @@ public class View {
 	private JButton b_form;
     private JButton refresh;
 	private Map<JButton, Integer > list_cv;
+	private JPanel panel;
 	
 	private Service service;
 	private JAXBContext jc;
+	private int nb_affiches = 0;
 	private ResumeManager rm = new ResumeManager();
 	private static final QName qname = new QName("", "");
 	private static final String URL = "http://tphebertxml.jrem76.cloudbees.net/rest/resume/";
@@ -79,11 +81,12 @@ public class View {
 	}
 	
 	private void createModel() throws JAXBException, SAXException, IOException, ParserConfigurationException {
-		list_cv = new HashMap<JButton, Integer>();
+		
         lister_les_cv();
 	}
 
     private void lister_les_cv() throws JAXBException, SAXException, IOException, ParserConfigurationException {
+    	list_cv = new HashMap<JButton, Integer>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
@@ -94,11 +97,9 @@ public class View {
         for (int i=0; i < racine.getLength(); i++) {
             Element e = (Element) racine.item(i);
             NodeList list = e.getChildNodes();
-            Resume cv = new Resume();
             String lastName = list.item(2).getTextContent();
             String firstName = list.item(1).getTextContent();
             String id = list.item(0).getTextContent();
-            System.out.println(id);
             list_cv.put(new JButton("Voir le CV de " + firstName + " " + lastName), Integer.parseInt(id));
         }
     }
@@ -112,12 +113,13 @@ public class View {
         for (int i = 2; i < 100; i++)
             list_cv.put(new JButton("Blabla"), i);*/
 
-		p = new JPanel(new GridLayout(0, 1)); {
+		panel = new JPanel(new GridLayout(0, 1)); {
 			for (JButton j : list_cv.keySet()) {
-				p.add(j);
+				panel.add(j);
+				nb_affiches++;
 			}
 		}
-        JScrollPane jsp = new JScrollPane(p);
+        JScrollPane jsp = new JScrollPane(panel);
 		frame.add(jsp);
 	}
 	
@@ -128,17 +130,6 @@ public class View {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Form_View fv = new Form_View();
-                try {
-                    lister_les_cv();
-                } catch (JAXBException e) {
-                    e.printStackTrace();
-                } catch (SAXException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParserConfigurationException e) {
-                    e.printStackTrace();
-                }
             }
 		});
 		
@@ -172,6 +163,18 @@ public class View {
             public void actionPerformed(ActionEvent e) {
                 try {
                     lister_les_cv();
+                    if (list_cv.size() != nb_affiches) {
+	                    JPanel tmp = new JPanel(new GridLayout(0, 1)); {
+	                    	for (JButton j : list_cv.keySet()) {
+	                    		if (list_cv.get(j) < nb_affiches) continue;
+	            				tmp.add(j);
+	            				nb_affiches++;
+	            			}
+	            		}
+	                    panel.add(tmp);
+	                    panel.revalidate();
+	                    frame.revalidate();
+                    }
                 } catch (JAXBException e1) {
                     e1.printStackTrace();
                 } catch (SAXException e1) {
@@ -181,7 +184,7 @@ public class View {
                 } catch (ParserConfigurationException e1) {
                     e1.printStackTrace();
                 }
-                frame.revalidate();
+                
             }
         });
 	}
