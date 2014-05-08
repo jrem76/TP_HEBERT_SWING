@@ -3,31 +3,59 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.ws.Dispatch;
+import javax.xml.ws.Service;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.http.HTTPBinding;
 
+import org.xml.sax.SAXException;
 import resume.*;
 
 
 public class Form_View {
-	private JFrame frame;
+
 	private Resume cv;
+    /*
+        Attributs pour la frame.
+     */
+    private JFrame frame;
 	private JButton add, ajouter_champs;
 	private JComboBox<String> jcb;
 	private JTextField lastName, firstName;
-	private Map<String, JTextField[]> map;
+	//Map servant à stocker à quoi correspond le tableau de JTextField.
+    private Map<String, JTextField[]> map;
 	private JPanel panel;
-	private int nb_ecole, nb_experience, nb_langue, nb_competence;
 
-
-
+  	private int nb_ecole, nb_experience, nb_langue, nb_competence;
+    /*
+        Pour pouvoir envoyer le CV
+     */
+    private Service service;
+    private JAXBContext jc;
+    private static final QName qname = new QName("", "");
+    private static final String URL = "http://tphebertxml.jrem76.cloudbees.net/rest/resume/";
     private boolean add_possible = false;
 	
 	public Form_View() {
         cv = new Resume();
-		createView();
+        try {
+            jc = JAXBContext.newInstance(Ecole.class, Langue.class, Competence.class, Resume.class, ResumeManager.class);
+        } catch (JAXBException je) {
+            System.out.println("Cannot create JAXBContext " + je);
+        }
+        createView();
+
 		placeComponents();
 		createController();
 		nb_ecole = 0;
@@ -201,12 +229,27 @@ public class Form_View {
                 cv.setExperiences(exp);
                 cv.setLangues(langues);
                 new CV_View(cv, frame);
-                //TO-DO
-                // send();
+                try {
+                    send();
+                } catch (JAXBException e1) {
+                    e1.printStackTrace();
+                } catch(NullPointerException n) {
+
+                }
                 add_possible = true;
             }
         });
 	}
+
+    private void send() throws JAXBException {
+        service = Service.create(qname);
+        service.addPort(qname, HTTPBinding.HTTP_BINDING, URL);
+        Dispatch<Source> dispatcher = service.createDispatch(qname,
+                Source.class, Service.Mode.MESSAGE);
+        Map<String, Object> requestContext = dispatcher.getRequestContext();
+        requestContext.put(MessageContext.HTTP_REQUEST_METHOD, "PUT");
+        Source result = dispatcher.invoke(new JAXBSource(jc, cv));
+    }
 
 	private void placeComponents() {
 		JPanel p = new JPanel(); {

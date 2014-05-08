@@ -34,6 +34,7 @@ import resume.Scolarite;
 public class View {
 	private JFrame frame;
 	private JButton b_form;
+    private JButton refresh;
 	private Map<JButton, Integer > list_cv;
 	
 	private Service service;
@@ -54,14 +55,11 @@ public class View {
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            e.printStackTrace();
 		}
 		placeComponents();
 		createController();
@@ -72,43 +70,47 @@ public class View {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             SwingUtilities.updateComponentTreeUI(frame);
-            //force chaque composant de la fenêtre à appeler sa méthode updateUI
         } catch (InstantiationException e) {
         } catch (ClassNotFoundException e) {
         } catch (UnsupportedLookAndFeelException e) {
         } catch (IllegalAccessException e) {}
 		b_form = new JButton("Ajouter un CV");
+        refresh = new JButton("Rafraichir");
 	}
 	
 	private void createModel() throws JAXBException, SAXException, IOException, ParserConfigurationException {
 		list_cv = new HashMap<JButton, Integer>();
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        lister_les_cv();
+	}
+
+    private void lister_les_cv() throws JAXBException, SAXException, IOException, ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(URL);
         NodeList racine = document.getDocumentElement().getElementsByTagName("listResume");
-        
+
         for (int i=0; i < racine.getLength(); i++) {
             Element e = (Element) racine.item(i);
             NodeList list = e.getChildNodes();
             Resume cv = new Resume();
-	    	String lastName = list.item(2).getTextContent();
-	        String firstName = list.item(1).getTextContent();
-	        String id = list.item(0).getTextContent();
-	        
-	        list_cv.put(new JButton("Voir le CV de " + firstName + " " + lastName), Integer.parseInt(id));
+            String lastName = list.item(2).getTextContent();
+            String firstName = list.item(1).getTextContent();
+            String id = list.item(0).getTextContent();
+            System.out.println(id);
+            list_cv.put(new JButton("Voir le CV de " + firstName + " " + lastName), Integer.parseInt(id));
         }
-            
-	}
-	
+    }
 	private void placeComponents() {
 		JPanel p = new JPanel(); {
 			p.add(b_form);
+            p.add(refresh);
 		}		
 		frame.add(p, BorderLayout.NORTH);
+        /*
         for (int i = 2; i < 100; i++)
-            list_cv.put(new JButton("Blabla"), i);
+            list_cv.put(new JButton("Blabla"), i);*/
 
 		p = new JPanel(new GridLayout(0, 1)); {
 			for (JButton j : list_cv.keySet()) {
@@ -126,16 +128,18 @@ public class View {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Form_View fv = new Form_View();
-
-               /* while(!fv.isAdd_possible()) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    lister_les_cv();
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
                 }
-                new CV_View(fv.getCv(), frame);*/
-			}
+            }
 		});
 		
 		for (JButton j : list_cv.keySet()) {
@@ -162,6 +166,24 @@ public class View {
 				}
 			});
 		}
+
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    lister_les_cv();
+                } catch (JAXBException e1) {
+                    e1.printStackTrace();
+                } catch (SAXException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (ParserConfigurationException e1) {
+                    e1.printStackTrace();
+                }
+                frame.revalidate();
+            }
+        });
 	}
 	private Resume analyze(NodeList racine) {
      Element e = (Element) racine.item(0);
