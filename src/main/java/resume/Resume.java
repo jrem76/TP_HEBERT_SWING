@@ -30,8 +30,13 @@ public class Resume {
     }
 
     public Resume() {
-    	this.experiences = new Experiences();
-    	this.scolarite = new Scolarite();
+        this.objectif = "";
+        this.lastName = "";
+        this.firstName = "";
+        this.experiences = new Experiences();
+        this.langues = new Langues();
+        this.competences_info = new Competences_Info();
+        this.scolarite = new Scolarite();
     }
 
     @XmlElement

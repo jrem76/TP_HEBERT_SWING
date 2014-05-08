@@ -3,10 +3,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import resume.Competence;
 import resume.Competences_Info;
@@ -17,12 +14,12 @@ import resume.Langues;
 import resume.Resume;
 
 public class CV_View {
-	private JFrame frame;
+	private JFrame frame, parent;
 	private Resume cv;
 	
-	
-	public CV_View(Resume cv) {
+	public CV_View(Resume cv, JFrame parent) {
 		this.cv = cv;
+        this.parent = parent;
 		createView();
 		placeComponents();
 		createController();
@@ -83,8 +80,16 @@ public class CV_View {
 	private void createView() {
 		// TODO Auto-generated method stub
 		frame = new JFrame("CV");
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(frame);
+            //force chaque composant de la fenêtre à appeler sa méthode updateUI
+        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException e) {
+        } catch (UnsupportedLookAndFeelException e) {
+        } catch (IllegalAccessException e) {}
 		frame.setSize(300,400);
-		frame.setLocationRelativeTo(null);
+		frame.setLocationRelativeTo(parent);
 		frame.setVisible(true);
 	}
 	
@@ -108,7 +113,7 @@ public class CV_View {
             	langues.add(new Langue("Anglais" , "bon"));
             	langues.add(new Langue("Espagnol" , "moyen"));
             	cv.setLangues(new Langues(langues));
-                new CV_View(cv);
+                new CV_View(cv, null);
             }
         });
     }

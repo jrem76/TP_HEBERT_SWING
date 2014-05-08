@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
@@ -72,6 +69,14 @@ public class View {
 	
 	private void createView() {
 		frame = new JFrame("TP WEB Hebert - CV");
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(frame);
+            //force chaque composant de la fenêtre à appeler sa méthode updateUI
+        } catch (InstantiationException e) {
+        } catch (ClassNotFoundException e) {
+        } catch (UnsupportedLookAndFeelException e) {
+        } catch (IllegalAccessException e) {}
 		b_form = new JButton("Ajouter un CV");
 	}
 	
@@ -102,12 +107,16 @@ public class View {
 			p.add(b_form);
 		}		
 		frame.add(p, BorderLayout.NORTH);
-		p = new JPanel(new GridLayout(list_cv.size(), 1)); {
+        for (int i = 2; i < 100; i++)
+            list_cv.put(new JButton("Blabla"), i);
+
+		p = new JPanel(new GridLayout(0, 1)); {
 			for (JButton j : list_cv.keySet()) {
 				p.add(j);
 			}
 		}
-		frame.add(p);
+        JScrollPane jsp = new JScrollPane(p);
+		frame.add(jsp);
 	}
 	
 	private void createController() {
@@ -116,7 +125,16 @@ public class View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new Form_View();			
+				Form_View fv = new Form_View();
+
+               /* while(!fv.isAdd_possible()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                new CV_View(fv.getCv(), frame);*/
 			}
 		});
 		
@@ -133,7 +151,7 @@ public class View {
 				        Document document = builder.parse(URL + list_cv.get(jb));
 				        NodeList racine = document.getDocumentElement().getElementsByTagName("listResume");
 						Resume cv = analyze(racine);
-						new CV_View(cv);
+						new CV_View(cv, frame);
 					} catch (ParserConfigurationException e1) {
 						e1.printStackTrace();
 					} catch (SAXException e1) {
